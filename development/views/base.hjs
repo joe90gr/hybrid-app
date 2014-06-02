@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+	<head>
+		<title>{{ title }}</title>
+		<link rel="stylesheet" text="text/css" href="css/styles.css" />
+		<script data-main="js/index" src="bower_components/requirejs/require.js"></script>
+	</head>
+	<body>
+        <div>
+            {{{ yield }}}
+        </div>
+	</body>
+</html>
