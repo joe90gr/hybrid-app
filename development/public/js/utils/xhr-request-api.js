@@ -41,16 +41,16 @@ function _responseError() {
     _arguments[0](this.statusText, 'fail');
 }
 
-function isPost(data) {
-    return data.type.toLowerCase() === 'post' || data.type.toLowerCase() === 'put' || data.type.toLowerCase() === 'delete';
+function isGET(data) {
+    return data.method.toLowerCase() === 'get';
 }
 
 function isFalseOrUndefined(item) {
     return (item === false) ? item : true;
 }
 
-function hasQueryParamsAndIsPost(data) {
-    return data.params && isPost(data) ? data.params : undefined;
+function hasQueryParamsAndIsNotGet(data) {
+    return data.params && !isGET(data) ? data.params : undefined;
 }
 
 function setHeaderParams(xhr, data) {
@@ -61,8 +61,8 @@ function setHeaderParams(xhr, data) {
     }
 }
 
-function isTypeSetReturnElseDefaultToGet(data) {
-    return data.type ? data.type.toLowerCase() : 'get' ;
+function isMethodSetReturnElseDefaultToGet(data) {
+    return data.method ? data.method.toLowerCase() : 'get' ;
 }
 
 function bindXHREvents(xhr, cb) {
@@ -74,14 +74,14 @@ function bindXHREvents(xhr, cb) {
 
 function xhrRequest(url, data, cb) {
     var xhr = new XMLHttpRequest();
-    var type = isTypeSetReturnElseDefaultToGet(data);
-    var paramsforPost = hasQueryParamsAndIsPost(data);
+    var method = isMethodSetReturnElseDefaultToGet(data);
+    var paramsforPost = hasQueryParamsAndIsNotGet(data);
     var isAsync = isFalseOrUndefined(data.async);
     if(isAsync){
         bindXHREvents(xhr, cb);
     }
 
-    xhr.open(type, url, isAsync);
+    xhr.open(method, url, isAsync);
     setHeaderParams(xhr, data);
 
     xhr.send(paramsforPost);
@@ -94,8 +94,9 @@ function xhrRequest(url, data, cb) {
 function bindPromise(url, data) {
     var _arguments = Array.prototype.slice.call(arguments);
     var xhrRequestBind = xhrRequest.bind(this);
+    var isAsync = isFalseOrUndefined(data.async);
     promise = new Promise();
-    if(isFalseOrUndefined(data.async)){
+    if(isAsync){
         promise.resolveRecursive(_arguments[0], data, xhrRequestBind);
     }else {
         xhrRequest(url, data);
@@ -106,30 +107,30 @@ function bindPromise(url, data) {
 
 XHRRequestAPI.prototype.post = function(url, data){
     var dataAugment = data || {};
-    dataAugment['Content-Type'] = 'application/x-www-form-urlencoded';
-    dataAugment.type = 'POST';
+    dataAugment['Content-Type'] = data['Content-Type'] || 'application/x-www-form-urlencoded';
+    dataAugment.method = 'POST';
     return bindPromise(url, dataAugment);
 };
 
 XHRRequestAPI.prototype.get = function(url, data){
     var dataAugment = data || {};
-    dataAugment['Accept-Type'] = 'text/html';
-    dataAugment['Content-Type'] = 'text/html; charset=utf-8';
-    dataAugment.type = 'GET';
+    dataAugment['Accept-Type'] =  data['Accept-Type'] || 'text/html';
+    dataAugment['Content-Type'] = data['Content-Type'] || 'text/html; charset=utf-8';
+    dataAugment.method = 'GET';
     return bindPromise(url, dataAugment);
 };
 
 XHRRequestAPI.prototype.put = function(url, data){
     var dataAugment = data || {};
-    dataAugment['Content-Type'] = 'application/json';
-    dataAugment.type = 'PUT';
+    dataAugment['Content-Type'] =  data['Content-Type'] || 'application/x-www-form-urlencoded';
+    dataAugment.method = 'PUT';
     return bindPromise(url, dataAugment);
 };
 
 XHRRequestAPI.prototype.delete = function(url, data){
     var dataAugment = data || {};
-    dataAugment['Content-Type'] = 'application/json';
-    dataAugment.type = 'DELETE'
+    dataAugment['Content-Type'] =  data['Content-Type'] || 'application/x-www-form-urlencoded';
+    dataAugment.method = 'DELETE'
     return bindPromise(url, dataAugment);
 };
 
