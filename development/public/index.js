@@ -9345,9 +9345,10 @@ var requestTypes = {
 
 function XHRRequestAPI() {
     bindPromise = bindPromise.bind(this);
+    xhrRequest = xhrRequest.bind(this);
 }
 
-function _retrieveResponse() {
+function retrieveResponse() {
     var _arguments = Array.prototype.slice.call(arguments);
     if( this.readyState === 4 && this.status == 200){
         /*DONE*/
@@ -9355,7 +9356,7 @@ function _retrieveResponse() {
     }
 }
 
-function _responseError() {
+function responseError() {
     var _arguments = Array.prototype.slice.call(arguments);
     _arguments[0](this.statusText, 'fail');
 }
@@ -9385,10 +9386,10 @@ function isMethodSetReturnElseDefaultToGet(data) {
 }
 
 function bindXHREvents(xhr, cb) {
-    var _retrieveResponseBind = _retrieveResponse.bind(xhr, cb);
-    var _responseErrorBind = _responseError.bind(xhr, cb);
-    xhr.addEventListener('readystatechange', _retrieveResponseBind, false);
-    xhr.addEventListener('error', _responseErrorBind, false);
+    var retrieveResponseBind = retrieveResponse.bind(xhr, cb);
+    var responseErrorBind = responseError.bind(xhr, cb);
+    xhr.addEventListener('readystatechange', retrieveResponseBind, false);
+    xhr.addEventListener('error', responseErrorBind, false);
 }
 
 function xhrRequest(url, data, cb) {
@@ -9412,11 +9413,10 @@ function xhrRequest(url, data, cb) {
 
 function bindPromise(url, data) {
     var _arguments = Array.prototype.slice.call(arguments);
-    var xhrRequestBind = xhrRequest.bind(this);
     var isAsync = isFalseOrUndefined(data.async);
     promise = new Promise();
     if(isAsync){
-        promise.resolveRecursive(_arguments[0], data, xhrRequestBind);
+        promise.resolveRecursive(_arguments[0], data, xhrRequest);
     }else {
         xhrRequest(url, data);
     }
@@ -9424,33 +9424,46 @@ function bindPromise(url, data) {
     return promise;
 }
 
-XHRRequestAPI.prototype.post = function(url, data){
+function constructRequest(method, url, data) {
     var dataAugment = data || {};
-    dataAugment['Content-Type'] = data['Content-Type'] || 'application/x-www-form-urlencoded';
-    dataAugment.method = 'POST';
+
+    switch(method){
+        case 'GET':
+            dataAugment['Accept-Type'] =  data['Accept-Type'] || 'text/html';
+            dataAugment['Content-Type'] = data['Content-Type'] || 'text/html; charset=utf-8';
+            dataAugment.method = 'GET';
+            break;
+        case 'POST':
+            dataAugment['Content-Type'] = data['Content-Type'] || 'application/x-www-form-urlencoded';
+            dataAugment.method = 'POST';
+            break;
+        case 'PUT':
+            dataAugment['Content-Type'] =  data['Content-Type'] || 'application/x-www-form-urlencoded';
+            dataAugment.method = 'PUT';
+            break;
+        case 'DELETE':
+            dataAugment['Content-Type'] =  data['Content-Type'] || 'application/x-www-form-urlencoded';
+            dataAugment.method = 'DELETE'
+            break;
+        default: ;
+    }
     return bindPromise(url, dataAugment);
+}
+
+XHRRequestAPI.prototype.post = function(url, data){
+    return constructRequest('POST', url, data);
 };
 
 XHRRequestAPI.prototype.get = function(url, data){
-    var dataAugment = data || {};
-    dataAugment['Accept-Type'] =  data['Accept-Type'] || 'text/html';
-    dataAugment['Content-Type'] = data['Content-Type'] || 'text/html; charset=utf-8';
-    dataAugment.method = 'GET';
-    return bindPromise(url, dataAugment);
+    return constructRequest('GET', url, data)
 };
 
 XHRRequestAPI.prototype.put = function(url, data){
-    var dataAugment = data || {};
-    dataAugment['Content-Type'] =  data['Content-Type'] || 'application/x-www-form-urlencoded';
-    dataAugment.method = 'PUT';
-    return bindPromise(url, dataAugment);
+    return constructRequest('PUT', url, data)
 };
 
 XHRRequestAPI.prototype.delete = function(url, data){
-    var dataAugment = data || {};
-    dataAugment['Content-Type'] =  data['Content-Type'] || 'application/x-www-form-urlencoded';
-    dataAugment.method = 'DELETE'
-    return bindPromise(url, dataAugment);
+    return constructRequest('DELETE', url, data)
 };
 
 module.exports = XHRRequestAPI;
