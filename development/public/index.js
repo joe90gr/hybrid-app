@@ -9201,17 +9201,256 @@ $(function(){
 
 },{"../bower_components/jquery/dist/jquery":1,"./main":3}],3:[function(require,module,exports){
 var $ = require('../bower_components/jquery/dist/jquery');
+var AjaxRequestAPI = require('../js/utils/xhr-request-api');
+
+function success(res){
+    console.log(res.response);
+   //console.log(res.getAllResponseHeaders())
+}
+
+function reject(error){
+    console.log(error);
+}
 
 var Main = function(){
-    console.log('init');
     this.init();
 };
+
 Main.prototype.init = function(){
-    console.log('init init');
-    $('body div').append('<h2>here i ammm</h2>');
+    var ajax = new AjaxRequestAPI();
+    ajax.get(['http://localhost:3000'],{async:true}).then(success, reject);
+    //for(var i = 0; i <100; i++) {
+        ajax.post(['http://localhost:3000/about'],{params:'user=yrtytryrtyrt'}).then(success, reject);
+    //}
+
+    var put = {params:'{"put":"success"}'}
+    var deletee = {params:'{"put":"success"}'}
+    ajax.put(['http://localhost:3000/about'],put).then(success, reject);
+    ajax.delete(['http://localhost:3000/about'],deletee).then(success, reject);
+    $('body div').append('<h2>here i am</h2>');
 };
 
 module.exports =  Main;
 
 
-},{"../bower_components/jquery/dist/jquery":1}]},{},[2,3])
+},{"../bower_components/jquery/dist/jquery":1,"../js/utils/xhr-request-api":5}],4:[function(require,module,exports){
+function Promise() {
+    this.fulfills = [];
+    this.rejects = [];
+    this.value = undefined; // tristate, undefined, thenable, promise
+    this.reason = undefined; // value of why promise was rejected
+    this.i = 0; //current resolve iteration.
+}
+
+Promise.prototype.then = function(onFulfilled, onRejected) {
+
+    if (typeof onFulfilled === 'function') {
+        if (this.value !== undefined) {
+            this.value = onFulfilled(this.value);
+        } else {
+            this.fulfills.push(onFulfilled);
+        }
+
+    } else if(onFulfilled !== undefined) {
+        throw new Error('no success function provided');
+    }
+
+    if(typeof onRejected === 'function') {
+        if (this.reason !== undefined) {
+            this.reason = onRejected(this.reason);
+        } else {
+            this.rejects.push(onRejected);
+        }
+    } else if(onRejected !== undefined) {
+        throw new Error('no fail function provided');
+    }
+
+    return this;
+};
+
+Promise.prototype.resolve = function(val, i) {
+    this.value = val;
+    this.envokeAll('fulfills', this.value, i);
+};
+
+Promise.prototype.reject = function(err, i){
+    this.reason = err;
+    this.envokeAll('rejects', this.reason, i);
+};
+
+Promise.prototype.envokeAll = function(resultType, val, i) {
+    var response = this[resultType];
+    if(i === null){
+        for(var j = 0; j < response.length; j++){
+            this.envoke(resultType, val, j);
+        }
+    } else {
+        this.envoke(resultType, val, i);
+    }
+};
+
+Promise.prototype.envoke = function(resultType, val, i){
+    var response = this[resultType];
+    if(resultType ==='fulfills'){
+        this.value = response[i] ? response[i](val) : function(){};
+    } else {
+        this.reason =  response[i] ? response[i](val) : function(){};
+    }
+};
+
+Promise.prototype.resolveRecursive = function(val, data, f) {
+    f(val[this.i], data, function (res, response) {
+        var resolveIndex = val.length <= 1 ? null : this.i;
+        if(response === 'success'){
+            this.resolve(res, resolveIndex);
+        } else {
+            this.reject(res, resolveIndex);
+        }
+
+        this.i++;
+        if(this.i >= val.length) { return; }
+        this.resolveRecursive(val, f);
+    }.bind(this));
+};
+
+module.exports = Promise;
+
+
+},{}],5:[function(require,module,exports){
+var Promise = require('../../js/utils/promise');
+var promise;
+var requestTypes = {
+    'Accept': true,
+    'Accept-Charset': true,
+    'Accept-Type': true,
+    'Accept-Encoding': true,
+    'Accept-Language': true,
+    'Accept-Datetime': true,
+    'Authorization': true,
+    'Cache-Control': true,
+    'Connection': true,
+    'Cookie': true,
+    'Content-Length': true,
+    'Content-MD5': true,
+    'Content-Type': true,
+    'Content-length': true,
+    'Date': true,
+    'Expect': true,
+    'From': true,
+    'Host':true,
+    'Origin': true,
+    'Referer': true,
+    'Transfer-Encoding': true
+};
+
+function XHRRequestAPI() {
+    bindPromise = bindPromise.bind(this);
+}
+
+function _retrieveResponse() {
+    var _arguments = Array.prototype.slice.call(arguments);
+    if( this.readyState === 4 && this.status == 200){
+        /*DONE*/
+        _arguments[0](this, 'success');
+    }
+}
+
+function _responseError() {
+    var _arguments = Array.prototype.slice.call(arguments);
+    _arguments[0](this.statusText, 'fail');
+}
+
+function isPost(data) {
+    return data.type.toLowerCase() === 'post' || data.type.toLowerCase() === 'put' || data.type.toLowerCase() === 'delete';
+}
+
+function isFalseOrUndefined(item) {
+    return (item === false) ? item : true;
+}
+
+function hasQueryParamsAndIsPost(data) {
+    return data.params && isPost(data) ? data.params : undefined;
+}
+
+function setHeaderParams(xhr, data) {
+    for(var val in data){
+        if(requestTypes[val]){
+            xhr.setRequestHeader(val, data[val]);
+        }
+    }
+}
+
+function isTypeSetReturnElseDefaultToGet(data) {
+    return data.type ? data.type.toLowerCase() : 'get' ;
+}
+
+function bindXHREvents(xhr, cb) {
+    var _retrieveResponseBind = _retrieveResponse.bind(xhr, cb);
+    var _responseErrorBind = _responseError.bind(xhr, cb);
+    xhr.addEventListener('readystatechange', _retrieveResponseBind, false);
+    xhr.addEventListener('error', _responseErrorBind, false);
+}
+
+function xhrRequest(url, data, cb) {
+    var xhr = new XMLHttpRequest();
+    var type = isTypeSetReturnElseDefaultToGet(data);
+    var paramsforPost = hasQueryParamsAndIsPost(data);
+    var isAsync = isFalseOrUndefined(data.async);
+    if(isAsync){
+        bindXHREvents(xhr, cb);
+    }
+
+    xhr.open(type, url, isAsync);
+    setHeaderParams(xhr, data);
+
+    xhr.send(paramsforPost);
+
+    if (xhr.status === 200 && !isAsync) {
+        promise.resolve(xhr.responseText, null);
+    }
+}
+
+function bindPromise(url, data) {
+    var _arguments = Array.prototype.slice.call(arguments);
+    var xhrRequestBind = xhrRequest.bind(this);
+    promise = new Promise();
+    if(isFalseOrUndefined(data.async)){
+        promise.resolveRecursive(_arguments[0], data, xhrRequestBind);
+    }else {
+        xhrRequest(url, data);
+    }
+
+    return promise;
+}
+
+XHRRequestAPI.prototype.post = function(url, data){
+    var dataAugment = data || {};
+    dataAugment['Content-Type'] = 'application/x-www-form-urlencoded';
+    dataAugment.type = 'POST';
+    return bindPromise(url, dataAugment);
+};
+
+XHRRequestAPI.prototype.get = function(url, data){
+    var dataAugment = data || {};
+    dataAugment['Accept-Type'] = 'text/html';
+    dataAugment['Content-Type'] = 'text/html; charset=utf-8';
+    dataAugment.type = 'GET';
+    return bindPromise(url, dataAugment);
+};
+
+XHRRequestAPI.prototype.put = function(url, data){
+    var dataAugment = data || {};
+    dataAugment['Content-Type'] = 'application/json';
+    dataAugment.type = 'PUT';
+    return bindPromise(url, dataAugment);
+};
+
+XHRRequestAPI.prototype.delete = function(url, data){
+    var dataAugment = data || {};
+    dataAugment['Content-Type'] = 'application/json';
+    dataAugment.type = 'DELETE'
+    return bindPromise(url, dataAugment);
+};
+
+module.exports = XHRRequestAPI;
+},{"../../js/utils/promise":4}]},{},[2,3,4,5])

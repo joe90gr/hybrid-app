@@ -46,7 +46,7 @@ module.exports = function(grunt) {
         },
         jshint: {
             all: [
-                'development/public/js/*.js'
+                'development/public/js/**/*.js'
             ],
             options:{
                 strict: false
