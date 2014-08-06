@@ -82,30 +82,21 @@ module.exports = function(grunt) {
                 options: {
 
                 }
+            },
+            continuous: {
+                files: {
+                    'tests/indexSpec.js': ['development/public/js/**/*.js','tests/public/js/**/*.js']
+                }
+            }
+        },
+        karma: {
+            unit: {
+                configFile: 'karma.conf.js'
             }
         }
-
-//        requirejs: {
-//            compile:{
-//                options: {
-//                    "mainConfigFile": "development/public/js/index.js",
-//                    //"appDir":"development",
-//                    "baseUrl":"./development/public/js",
-//                    "name": "index",
-//                    "out": 'production/public/js/index.js',
-//                    "optimize":"uglify2",
-//                    "optimizeCss":"none",
-//                    "fileExclusionRegExp":"styles|vendor|node_modules|.*min\\.js|test$",
-//                    "preserveLicenseComments":false,
-//                    "exclude": [
-//                        "../bower_components/requirejs/require.js"
-//                    ]
-//                }
-//            }
-//        }
     });
 
-    grunt.loadNpmTasks('grunt-contrib-requirejs');
+    grunt.loadNpmTasks('grunt-karma');
     grunt.loadNpmTasks('grunt-csso');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-sass');
@@ -115,5 +106,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
 
     grunt.registerTask('default', ['sass', 'jshint', 'browserify', 'copy', 'uglify', 'csso']);
+    grunt.registerTask('test', ['browserify:continuous','karma'])
 };
 

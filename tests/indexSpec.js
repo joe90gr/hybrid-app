@@ -9470,4 +9470,20 @@ XHRRequestAPI.prototype.deletee = function(url, data){
 };
 
 module.exports = XHRRequestAPI;
-},{"../../js/utils/promise":4}]},{},[2,3,4,5])
+},{"../../js/utils/promise":4}],6:[function(require,module,exports){
+describe('test',function(){
+    var main = require('../../../development/public/js/main.js');
+    var m = new main();
+
+    it('should test',function(){
+        var spy = sinon.spy(m,'init')
+        m.init();
+        assert(spy.calledOnce);
+    });
+
+    it('should test this',function(){
+        expect(true).to.be.true;
+    });
+
+})
+},{"../../../development/public/js/main.js":3}]},{},[2,3,4,5,6]);

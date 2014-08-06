@@ -21,10 +21,10 @@ Main.prototype.init = function(){
         ajax.post(['http://localhost:3000/about'],{params:'user=yrtytryrtyrt'}).then(success, reject);
     //}
 
-    var put = { params:'{"put":"success"}'}
-    var deletee = {"Content-Type": "application/json", params:'{"put":"success"}'}
+    var put = { params:'{"put":"success"}'};
+    var deletee = {"Content-Type": "application/json", params:'{"put":"success"}'};
     ajax.put(['http://localhost:3000/about'],put).then(success, reject);
-    ajax.delete(['http://localhost:3000/about'],deletee).then(success, reject);
+    ajax.deletee(['http://localhost:3000/about'],deletee).then(success, reject);
     $('body div').append('<h2>here i am</h2>');
 };
 

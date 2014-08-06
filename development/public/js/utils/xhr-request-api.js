@@ -124,7 +124,7 @@ function constructRequest(method, url, data) {
             break;
         case 'DELETE':
             dataAugment['Content-Type'] =  data['Content-Type'] || 'application/x-www-form-urlencoded';
-            dataAugment.method = 'DELETE'
+            dataAugment.method = 'DELETE';
             break;
         default:
             dataAugment['Accept-Type'] =  data['Accept-Type'] || 'text/html';
@@ -139,15 +139,15 @@ XHRRequestAPI.prototype.post = function(url, data){
 };
 
 XHRRequestAPI.prototype.get = function(url, data){
-    return constructRequest('GET', url, data)
+    return constructRequest('GET', url, data);
 };
 
 XHRRequestAPI.prototype.put = function(url, data){
-    return constructRequest('PUT', url, data)
+    return constructRequest('PUT', url, data);
 };
 
-XHRRequestAPI.prototype.delete = function(url, data){
-    return constructRequest('DELETE', url, data)
+XHRRequestAPI.prototype.deletee = function(url, data){
+    return constructRequest('DELETE', url, data);
 };
 
 module.exports = XHRRequestAPI;
