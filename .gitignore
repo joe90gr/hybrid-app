@@ -1,7 +1,8 @@
 .idea
 .sass-cache
 development/public/bower_components/
-
+development/public/index.js
+tests/public/indexSpec.js
 node_modules/
 production/
 html5app2.iml
