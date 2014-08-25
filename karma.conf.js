@@ -8,15 +8,16 @@ module.exports = function(config) {
     basePath: '',
 
     // frameworks to use
-    frameworks: ['mocha','chai','sinon'],
+    frameworks: ['browserify', 'mocha', 'chai', 'sinon'],
 
     // list of files / patterns to load in the browser
     files: [
         //{pattern: 'development/public/js/**/*.js', included: false},
         //{pattern: 'development/js/libs/*.js', included: false},
         //'test/*Spec.js' // same as {pattern: 'test/*Spec.js', included: true},
-        {pattern: 'tests/indexSpec.js', included: true}
+        //{pattern: 'tests/indexSpec.js', included: true},
        // {pattern: 'test/utils/**/*Spec.js', included: false},
+        'tests/**/*'
     ],
 
 
@@ -66,6 +67,22 @@ module.exports = function(config) {
 
     // Continuous Integration mode
     // if true, it capture browsers, run tests and exit
-    singleRun: false
+    singleRun: false,
+
+
+    // Browserify config (all optional)
+    browserify: {
+      // extensions: ['.coffee'],
+      // ignore: [],
+      // transform: ['coffeeify'],
+      // debug: true,
+      // noParse: ['jquery'],
+      watch: true
+    },
+
+
+    // Add browserify to preprocessors
+    preprocessors: {'tests/**/*': ['browserify']}
+
   });
 };

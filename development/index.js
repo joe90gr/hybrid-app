@@ -8,7 +8,7 @@ var bodyParser = require('body-parser');
 var app = module.exports = express();
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, 'public/views'));
 app.set('view engine', 'hjs');
 app.set('layout','base');
 app.enable('view cache');

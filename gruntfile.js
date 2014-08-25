@@ -74,19 +74,24 @@ module.exports = function(grunt) {
                 }
             }
         },
+        react: {
+
+                files: {
+                    expand: true,
+                    cwd: 'development/public/views/',
+                    src: ['**/*.jsx'],
+                    dest: 'development/public/templates/',
+                    ext: '.js'
+                }
+
+        },
         browserify: {
             dist: {
                 files: {
                     'development/public/index.js': ['development/public/js/**/*.js']
                 },
                 options: {
-
-                }
-            },
-            continuous: {
-                files: {
-                    'tests/indexSpec.js': ['development/public/js/**/*.js','tests/public/js/**/*.js']
-                }
+                    transform:  [ require('grunt-react').browserify ]                }
             }
         },
         karma: {
@@ -104,6 +109,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-browserify');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-react');
 
     grunt.registerTask('default', ['sass', 'jshint', 'browserify', 'copy', 'uglify', 'csso']);
     grunt.registerTask('test', ['browserify:continuous','karma'])

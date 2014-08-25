@@ -1,4 +1,9 @@
 var $ = require('../bower_components/jquery/dist/jquery');
+
+//var React = require('../bower_components/react/react');
+
+//var JSXTransformer = require('../bower_components/react/JSXTransformer');
+
 var AjaxRequestAPI = require('../js/utils/xhr-request-api');
 
 function success(res){
@@ -22,10 +27,12 @@ Main.prototype.init = function(){
     //}
 
     var put = { params:'{"put":"success"}'};
-    var deletee = {"Content-Type": "application/json", params:'{"put":"success"}'};
+    var deletee = {"Content-Type": "application/json", params:'{"del":"success"}'};
     ajax.put(['http://localhost:3000/about'],put).then(success, reject);
     ajax.deletee(['http://localhost:3000/about'],deletee).then(success, reject);
-    $('body div').append('<h2>here i am</h2>');
+
+    //$('body div').append('<h2>here i am</h2>');
+    var t = require('../templates/y');
 };
 
 module.exports =  Main;

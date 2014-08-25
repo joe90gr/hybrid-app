@@ -3,10 +3,13 @@
 		<title>{{ title }}</title>
 		<link rel="stylesheet" text="text/css" href="css/styles.css" />
 		<script src="index.js"></script>
+
 	</head>
 	<body>
         <div>
             {{{ yield }}}
+            <div id="example"></div>
+
         </div>
 	</body>
 </html>
