@@ -1,27 +1,50 @@
 var xhrRequest = require('../../../../development/public/js/utils/xhr-request-api.js');
 
-describe('testuu', function() {
+describe('xhrRequestAPI', function() {
     var xhr = new xhrRequest();
+    var successSpy
+    var rejectSpy
 
-    before(function(){
+    var url = ['http://localhost:10346'];
+    var asyncTrue = {async:true};
+    var asyncFalse = {async:false};
+
+    describe('given that the request url is valid', function() {
+        describe('and i a asynchronous request', function() {
+            before(function(done){
+                successSpy = sinon.spy( function success(data){ done();} );
+                rejectSpy = sinon.spy( function fail(data){ done(); } );
+                xhr.get(url, asyncTrue).then(successSpy, rejectSpy);
+            })
+
+            it('should  resolve a fullfilled promise', function(){
+                assert(successSpy.calledOnce);
+                assert(rejectSpy.notCalled);
+            })
+
+
+        })
+
+        describe('and is a synchronous request', function() {
+            before(function(done){
+                successSpy = sinon.spy( function success(data){ done();} );
+                rejectSpy = sinon.spy( function fail(data){ done(); } );
+                xhr.get(url, asyncFalse).then(successSpy, rejectSpy);
+            })
+
+            it('should  resolve a fullfilled promise', function(){
+                assert(successSpy.calledOnce);
+                assert(rejectSpy.notCalled);
+            })
+        })
+
+        after(function(){
+            successSpy.reset();
+            rejectSpy.reset();
+        });
 
     })
-    it('testyy', function(done){
-        var s = sinon.spy(success);
-        var r = sinon.spy(fail);
-        function success(data){
-            console.log(data,'success test');
-            expect(true).to.be.true;
-            done();
-        }
-        function fail(data){
-            console.log(data,'fail test');
-            expect(true).to.be.true;
-            done();
-        }
 
-        xhr.get(['http://localhost:10346'],{async:true}).then(success, fail);
 
-    });
 
 })

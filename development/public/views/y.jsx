@@ -1,9 +1,6 @@
 /** @jsx React.DOM */
 
 var React = require('react');
-var el = document.createElement('div');
-el.id = 'example';
-document.body.appendChild(el)
 
 var TodoList = React.createClass({
   render: function() {
