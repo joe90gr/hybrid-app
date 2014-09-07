@@ -75,6 +75,7 @@ function bindXHREvents(xhr, cb) {
 
 function xhrRequest(url, data, cb) {
     var xhr = new XMLHttpRequest();
+    var error;
     var method = isMethodSetReturnElseDefaultToGet(data);
     var paramsforPost = hasQueryParamsAndIsNotGet(data);
     var isAsync = isFalseOrUndefined(data.async);
@@ -85,10 +86,18 @@ function xhrRequest(url, data, cb) {
     xhr.open(method, url, isAsync);
     setHeaderParams(xhr, data);
 
-    xhr.send(paramsforPost);
+    try{
+        xhr.send(paramsforPost);
+    } catch(e){
+        error = e;
+    }
 
-    if (xhr.status === 200 && !isAsync) {
-        promise.resolve(xhr.responseText, null);
+    if(!isAsync){
+        if (xhr.status === 200) {
+            promise.resolve(xhr, null);
+        } else {
+            promise.reject(error, null);
+        }
     }
 }
 
@@ -110,25 +119,25 @@ function constructRequest(method, url, data) {
 
     switch(method){
         case 'GET':
-            dataAugment['Accept-Type'] =  data['Accept-Type'] || 'text/html';
-            dataAugment['Content-Type'] = data['Content-Type'] || 'text/html; charset=utf-8';
+            dataAugment['Accept-Type'] =  dataAugment['Accept-Type'] || 'text/html';
+            dataAugment['Content-Type'] = dataAugment['Content-Type'] || 'text/html; charset=utf-8';
             dataAugment.method = 'GET';
             break;
         case 'POST':
-            dataAugment['Content-Type'] = data['Content-Type'] || 'application/x-www-form-urlencoded';
+            dataAugment['Content-Type'] = dataAugment['Content-Type'] || 'application/x-www-form-urlencoded';
             dataAugment.method = 'POST';
             break;
         case 'PUT':
-            dataAugment['Content-Type'] =  data['Content-Type'] || 'application/x-www-form-urlencoded';
+            dataAugment['Content-Type'] =  dataAugment['Content-Type'] || 'application/x-www-form-urlencoded';
             dataAugment.method = 'PUT';
             break;
         case 'DELETE':
-            dataAugment['Content-Type'] =  data['Content-Type'] || 'application/x-www-form-urlencoded';
+            dataAugment['Content-Type'] =  dataAugment['Content-Type'] || 'application/x-www-form-urlencoded';
             dataAugment.method = 'DELETE';
             break;
         default:
-            dataAugment['Accept-Type'] =  data['Accept-Type'] || 'text/html';
-            dataAugment['Content-Type'] = data['Content-Type'] || 'text/html; charset=utf-8';
+            dataAugment['Accept-Type'] =  dataAugment['Accept-Type'] || 'text/html';
+            dataAugment['Content-Type'] = dataAugment['Content-Type'] || 'text/html; charset=utf-8';
             dataAugment.method = 'GET';
     }
     return bindPromise(url, dataAugment);
@@ -146,7 +155,7 @@ XHRRequestAPI.prototype.put = function(url, data){
     return constructRequest('PUT', url, data);
 };
 
-XHRRequestAPI.prototype.deletee = function(url, data){
+XHRRequestAPI.prototype.del = function(url, data){
     return constructRequest('DELETE', url, data);
 };
 

@@ -9,14 +9,13 @@ module.exports = function(grunt) {
                         cwd: 'development/',
                         src: [
                             'index.js',
-                            'bin/**/',
-                            'routes/**/',
-                            'views/**/',
-                            'application/**/*.*',
+                            'bin/**/*',
+                            'routes/**/*',
                             'public/css/*.css',
-                            'public/fonts/**/*.*',
-                            'public/images/**/*.*',
-                            'public/bower_components/requirejs/require.js'
+                            'public/fonts/**/*',
+                            'public/images/**/*',
+                            'public/templates/**/*',
+                            'public/views/**/*'
                         ],
                         dest: 'production/'
                     }
@@ -75,15 +74,17 @@ module.exports = function(grunt) {
             }
         },
         react: {
-
-                files: {
-                    expand: true,
-                    cwd: 'development/public/views/',
-                    src: ['**/*.jsx'],
-                    dest: 'development/public/templates/',
-                    ext: '.js'
-                }
-
+            dynamic_mappings: {
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'development/public/views/',
+                        src: ['**/*.jsx'],
+                        dest: 'development/public/templates/',
+                        ext: '.js'
+                    }
+                ]
+            }
         },
         browserify: {
             dist: {
@@ -91,12 +92,19 @@ module.exports = function(grunt) {
                     'development/public/index.js': ['development/public/js/**/*.js']
                 },
                 options: {
-                    transform:  [ require('grunt-react').browserify ]                }
+                    transform:  [ require('grunt-react').browserify ]
+                }
             }
         },
         karma: {
             unit: {
                 configFile: 'karma.conf.js'
+            },
+            continuous: {
+                configFile: 'karma.conf.js',
+                singleRun: true,
+                autoWatch: false,
+                browsers: ['PhantomJS']
             }
         }
     });
@@ -111,7 +119,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-react');
 
-    grunt.registerTask('default', ['sass', 'jshint', 'browserify', 'copy', 'uglify', 'csso']);
-    grunt.registerTask('test', ['browserify:continuous','karma'])
+    grunt.registerTask('test', ['karma']);
+    grunt.registerTask('default', ['sass', 'jshint', 'react', 'karma:continuous', 'browserify', 'copy', 'uglify', 'csso']);
+
 };
 

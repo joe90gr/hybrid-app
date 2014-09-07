@@ -17,7 +17,8 @@ module.exports = function(config) {
         //'test/*Spec.js' // same as {pattern: 'test/*Spec.js', included: true},
         //{pattern: 'tests/indexSpec.js', included: true},
        // {pattern: 'test/utils/**/*Spec.js', included: false},
-        'tests/**/*'
+        //{pattern: 'development/public/js/utils/polyfills/binde.js', included: true},
+        'tests/**/*.js'
     ],
 
 
@@ -72,17 +73,17 @@ module.exports = function(config) {
 
     // Browserify config (all optional)
     browserify: {
-      // extensions: ['.coffee'],
-      // ignore: [],
-      // transform: ['coffeeify'],
-      // debug: true,
-      // noParse: ['jquery'],
-      watch: true
+        files: [
+            'development/public/js/utils/polyfills/bind.js',
+            "tests/**/*.js"
+        ]
     },
 
 
     // Add browserify to preprocessors
-    preprocessors: {'tests/**/*': ['browserify']}
+    preprocessors: {
+        "tests/**/*":"browserify"
+    }
 
   });
 };
