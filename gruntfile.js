@@ -1,3 +1,4 @@
+var stringify = require('stringify');
 module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -92,7 +93,9 @@ module.exports = function(grunt) {
                     'development/public/index.js': ['development/public/js/**/*.js']
                 },
                 options: {
-                    transform:  [ require('grunt-react').browserify ]
+                    transform:  [
+                        require('grunt-react').browserify
+                    ]
                 }
             }
         },

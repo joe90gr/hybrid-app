@@ -118,9 +118,9 @@ function constructRequest(method, url, data) {
     var dataAugment = data || {};
 
     switch(method){
-        case 'GET':
-            dataAugment['Accept-Type'] =  dataAugment['Accept-Type'] || 'text/html';
-            dataAugment['Content-Type'] = dataAugment['Content-Type'] || 'text/html; charset=utf-8';
+        case 'GET_JSON':
+            dataAugment['Accept-Type'] =  dataAugment['Accept-Type'] || 'application/json';
+            dataAugment['Content-Type'] = dataAugment['Content-Type'] || 'application/json';
             dataAugment.method = 'GET';
             break;
         case 'POST':
@@ -159,4 +159,8 @@ XHRRequestAPI.prototype.del = function(url, data){
     return constructRequest('DELETE', url, data);
 };
 
-module.exports = XHRRequestAPI;
+XHRRequestAPI.prototype.getJSON = function(url, data){
+    return constructRequest('GET_JSON', url, data);
+};
+
+module.exports = new XHRRequestAPI;

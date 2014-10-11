@@ -1,8 +1,8 @@
 var $ = require('../bower_components/jquery/dist/jquery');
 //var React = require('../bower_components/react/react');
 //var JSXTransformer = require('../bower_components/react/JSXTransformer');
-
-var AjaxRequestAPI = require('../js/utils/xhr-request-api');
+var React = require('react');
+var ajax = require('../js/utils/xhr-request-api');
 
 function success(res){
     console.log(res.response);
@@ -18,7 +18,6 @@ var Main = function(){
 };
 
 Main.prototype.init = function(){
-    var ajax = new AjaxRequestAPI();
     var g = ajax.get(['http://localhost:3000']).then(success, reject);
     g.then(success, reject);
     g.then(success, reject);
@@ -34,6 +33,9 @@ Main.prototype.init = function(){
 
     //$('body div').append('<h2>here i am</h2>');
     var t = require('../templates/y');
+    //var t = require('../views/y.jsx');
+    var test = require('../templates/test');
+    React.renderComponent(t(null), document.getElementById('example'));
 };
 
 module.exports =  Main;
