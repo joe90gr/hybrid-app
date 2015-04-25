@@ -7,6 +7,7 @@ var requestTypes = {
     'Accept-Encoding': true,
     'Accept-Language': true,
     'Accept-Datetime': true,
+    'Access-Token': true,
     'Authorization': true,
     'Cache-Control': true,
     'Connection': true,
@@ -163,4 +164,4 @@ XHRRequestAPI.prototype.getJSON = function(url, data){
     return constructRequest('GET_JSON', url, data);
 };
 
-module.exports = new XHRRequestAPI;
+module.exports = new XHRRequestAPI();

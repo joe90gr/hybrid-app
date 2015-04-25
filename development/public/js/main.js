@@ -18,24 +18,40 @@ var Main = function(){
 };
 
 Main.prototype.init = function(){
-    var g = ajax.get(['http://localhost:3000']).then(success, reject);
-    g.then(success, reject);
-    g.then(success, reject);
+    //ajax.get(['/'],{'Access-Token':'dfgdfgdf'}).then(success, reject);
 
     //for(var i = 0; i <100; i++) {
-        ajax.post(['http://localhost:3000/about'],{params:'user=yrtytryrtyrt'}).then(success, reject);
+        //ajax.post(['/about'],{params:'user=yrtytryrtyrt'}).then(success, reject);
     //}
 
     var put = { params:'{"put":"success"}'};
     var del = {"Content-Type": "application/json", params:'{"del":"success"}'};
-    ajax.put(['http://localhost:3000/about'],put).then(success, reject);
-    ajax.del(['http://localhost:3000/about'],del).then(success, reject);
+    //ajax.put(['/about'],put).then(success, reject);
+    //ajax.del(['/about'],del).then(success, reject);
 
     //$('body div').append('<h2>here i am</h2>');
     var t = require('../templates/y');
     //var t = require('../views/y.jsx');
     var test = require('../templates/test');
-    React.renderComponent(t(null), document.getElementById('example'));
+    //React.renderComponent(t(null), document.getElementById('example'));
+
+    var login = document.getElementById('login');
+    login.addEventListener('click',function() {
+        var config = {
+            "Content-Type": "application/json",
+            params:'{"userName":"joe90"}'
+        };
+        ajax.post(['/login'], config).then(function(res){
+            console.log(res.response);
+        }, function(err) {});
+    },false);
+
+    var logout = document.getElementById('logout');
+    logout.addEventListener('click',function() {
+        ajax.get(['/logout']).then(function(res){
+            console.log(res.response);
+        }, function(err) {});
+    },false);
 };
 
 module.exports =  Main;

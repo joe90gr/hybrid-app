@@ -1,7 +1,7 @@
 var xhrRequest = require('../../../../development/public/js/utils/xhr-request-api.js');
 
 describe('xhrRequestAPI', function() {
-    var xhr = new xhrRequest();
+    var xhr = xhrRequest;
     var successSpy
     var rejectSpy
 
@@ -44,7 +44,4 @@ describe('xhrRequestAPI', function() {
         });
 
     })
-
-
-
 })

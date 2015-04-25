@@ -1,4 +1,3 @@
-var stringify = require('stringify');
 module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -23,20 +22,9 @@ module.exports = function(grunt) {
                 ]
             }
         },
-        csso:{
-            main:{
-                options:{
-                    restructure:true
-                },
-                baseUrl:"production/",
-                files:[
-                    {src:'production/public/css/styles.css', dest:'production/public/css/styles.css'}
-                ]
-            }
-        },
         sass: {
             options: {
-                style: '{{expanded}}'
+                style: 'compressed'
             },
             dist: {
                 files: {
@@ -114,7 +102,6 @@ module.exports = function(grunt) {
     });
 
     grunt.loadNpmTasks('grunt-karma');
-    grunt.loadNpmTasks('grunt-csso');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-sass');
     grunt.loadNpmTasks('grunt-contrib-jshint');
@@ -124,7 +111,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-react');
 
     grunt.registerTask('test', ['karma']);
-    grunt.registerTask('default', ['sass', 'jshint', 'react', 'karma:continuous', 'browserify', 'copy', 'uglify', 'csso']);
+    grunt.registerTask('default', ['sass', 'jshint', 'react', 'karma:continuous', 'browserify', 'copy', 'uglify']);
 
 };
 
