@@ -61,19 +61,6 @@ module.exports = function(grunt) {
                 }
             }
         },
-        react: {
-            dynamic_mappings: {
-                files: [
-                    {
-                        expand: true,
-                        cwd: 'development/public/react-views/jsx',
-                        src: ['**/*.jsx'],
-                        dest: 'development/public/react-views/transpiled-jsx',
-                        ext: '.js'
-                    }
-                ]
-            }
-        },
         browserify: {
             dist: {
                 files: {
@@ -81,7 +68,7 @@ module.exports = function(grunt) {
                 },
                 options: {
                     transform:  [
-                        require('grunt-react').browserify
+                        'reactify'
                     ]
                 }
             }
@@ -107,10 +94,9 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-browserify');
     grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-react');
 
     grunt.registerTask('test', ['karma']);
-    grunt.registerTask('build',  ['sass', 'jshint', 'react', 'browserify', 'copy']);
-    grunt.registerTask('default', ['sass', 'jshint', 'react', 'karma:continuous', 'browserify', 'copy', 'uglify']);
+    grunt.registerTask('build',  ['sass', 'jshint', 'browserify', 'copy']);
+    grunt.registerTask('default', ['sass', 'jshint', 'karma:continuous', 'browserify', 'copy', 'uglify']);
 };
 

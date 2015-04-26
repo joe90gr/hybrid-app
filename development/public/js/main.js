@@ -1,6 +1,5 @@
-var $ = require('../bower_components/jquery/dist/jquery');
-//var React = require('../bower_components/react/react');
-//var JSXTransformer = require('../bower_components/react/JSXTransformer');
+//var $ = require('../bower_components/jquery/dist/jquery');
+
 var React = require('react');
 var ajax = require('../js/utils/xhr-request-api');
 
@@ -29,11 +28,8 @@ Main.prototype.init = function(){
     //ajax.put(['/about'],put).then(success, reject);
     //ajax.del(['/about'],del).then(success, reject);
 
-    //$('body div').append('<h2>here i am</h2>');
-   // var t = require('../templates/y');
-    var t = require('../react-views/jsx/y.jsx');
-    var test = require('../react-views/transpiled-jsx/test');
-    //React.renderComponent(t(null), document.getElementById('example'));
+    var todoExample = require('../react-views/example-view/y.jsx');
+    React.render(React.createElement(todoExample, null), document.getElementById('example'));
 
     var login = document.getElementById('login');
     login.addEventListener('click',function() {

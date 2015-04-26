@@ -5,8 +5,8 @@ var debug = require('debug')('node');
 var app = require('../index');
 
 var https_options = {
-    key: fs.readFileSync('./14961049-localhost.key'),
-    cert: fs.readFileSync('./14961049-localhost.cert')
+    key: fs.readFileSync('./certificates/14961049-localhost.key'),
+    cert: fs.readFileSync('./certificates/14961049-localhost.cert')
 };
 
 app.set('port', process.env.PORT || 3000);
