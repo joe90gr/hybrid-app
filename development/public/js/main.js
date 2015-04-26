@@ -30,9 +30,9 @@ Main.prototype.init = function(){
     //ajax.del(['/about'],del).then(success, reject);
 
     //$('body div').append('<h2>here i am</h2>');
-    var t = require('../templates/y');
-    //var t = require('../views/y.jsx');
-    var test = require('../templates/test');
+   // var t = require('../templates/y');
+    var t = require('../react-views/jsx/y.jsx');
+    var test = require('../react-views/test');
     //React.renderComponent(t(null), document.getElementById('example'));
 
     var login = document.getElementById('login');

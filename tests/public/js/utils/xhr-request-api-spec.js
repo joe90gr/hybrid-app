@@ -5,36 +5,33 @@ describe('xhrRequestAPI', function() {
     var successSpy
     var rejectSpy
 
-    var url = ['http://localhost:10346'];
-    var asyncTrue = {async:true};
-    var asyncFalse = {async:false};
+    var ACTIVE_BASE_URL = ['http://localhost:10346'];
+    var INACTIVE_BASE_URL = ['http://localhost:10350'];
+    var ASYNCHRONOUS = {async:true};
+    var SYNCHRONOUS = {async:false};
 
     describe('given that the request url is valid', function() {
-        describe('and i a asynchronous request', function() {
+        describe('and the request is asynchronous.', function() {
             before(function(done){
-                successSpy = sinon.spy( function success(data){ done();} );
-                rejectSpy = sinon.spy( function fail(data){ done(); } );
-                xhr.get(url, asyncTrue).then(successSpy, rejectSpy);
+                successSpy = sinon.spy( function success(response){ done();} );
+                rejectSpy = sinon.spy( function fail(response){ done(); } );
+                xhr.get(ACTIVE_BASE_URL, ASYNCHRONOUS).then(successSpy, rejectSpy);
             })
 
-            it('should  resolve a fullfilled promise', function(){
+            it('should provide a successful response and call the success callback', function(){
                 assert(successSpy.calledOnce);
-                assert(rejectSpy.notCalled);
             })
-
-
         })
 
-        describe('and is a synchronous request', function() {
+        describe('and the request is synchronous.', function() {
             before(function(done){
-                successSpy = sinon.spy( function success(data){ done();} );
-                rejectSpy = sinon.spy( function fail(data){ done(); } );
-                xhr.get(url, asyncFalse).then(successSpy, rejectSpy);
+                successSpy = sinon.spy( function success(response){ done();} );
+                rejectSpy = sinon.spy( function fail(response){ done(); } );
+                xhr.get(ACTIVE_BASE_URL, SYNCHRONOUS).then(successSpy, rejectSpy);
             })
 
-            it('should  resolve a fullfilled promise', function(){
+            it('should provide a successful response and call the success callback', function(){
                 assert(successSpy.calledOnce);
-                assert(rejectSpy.notCalled);
             })
         })
 
@@ -42,6 +39,18 @@ describe('xhrRequestAPI', function() {
             successSpy.reset();
             rejectSpy.reset();
         });
+    })
 
+    describe('given that the request url is invalid', function() {
+        before(function(done){
+            this.timeout(6000);
+            successSpy = sinon.spy( function success(response){ console.log(response);done();} );
+            rejectSpy = sinon.spy( function fail(response){console.log(response); done(); } );
+            xhr.get(INACTIVE_BASE_URL, ASYNCHRONOUS).then(successSpy, rejectSpy);
+        })
+
+        it('should provide a error response by calling reject callback', function(){
+            assert(rejectSpy.calledOnce);
+        })
     })
 })

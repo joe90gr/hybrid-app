@@ -1,28 +1,28 @@
 var Promise = require('../../js/utils/promise');
 var promise;
-var requestTypes = {
-    'Accept': true,
-    'Accept-Charset': true,
-    'Accept-Type': true,
-    'Accept-Encoding': true,
-    'Accept-Language': true,
-    'Accept-Datetime': true,
-    'Access-Token': true,
-    'Authorization': true,
-    'Cache-Control': true,
-    'Connection': true,
-    'Cookie': true,
-    'Content-Length': true,
-    'Content-MD5': true,
-    'Content-Type': true,
-    'Content-length': true,
-    'Date': true,
-    'Expect': true,
-    'From': true,
-    'Host':true,
-    'Origin': true,
-    'Referer': true,
-    'Transfer-Encoding': true
+var REQUEST_TYPES = {
+    'Accept': 'Accept',
+    'Accept-Charset': 'Accept-Charset',
+    'Accept-Type': 'Accept-Type',
+    'Accept-Encoding': 'Accept-Encoding',
+    'Accept-Language': 'Accept-Language',
+    'Accept-Datetime': 'Accept-Datetime',
+    'Access-Token': 'Access-Token',
+    'Authorization': 'Authorization',
+    'Cache-Control': 'Cache-Control',
+    'Connection': 'Connection',
+    'Cookie': 'Cookie',
+    'Content-Length': 'Content-Length',
+    'Content-MD5': 'Content-MD5',
+    'Content-Type': 'Content-Type',
+    'Content-length': 'Content-length',
+    'Date': 'Date',
+    'Expect': 'Expect',
+    'From': 'From',
+    'Host': 'Host',
+    'Origin': 'Origin',
+    'Referer': 'Referer',
+    'Transfer-Encoding': 'Transfer-Encoding'
 };
 
 function XHRRequestAPI() {
@@ -43,49 +43,51 @@ function responseError() {
     _arguments[0](this.statusText, 'fail');
 }
 
-function isGET(data) {
-    return data.method.toLowerCase() === 'get';
+function isGET(requestTypes) {
+    return requestTypes.method.toLowerCase() === 'get';
 }
 
 function isFalseOrUndefined(item) {
     return (item === false) ? item : true;
 }
 
-function hasQueryParamsAndIsNotGet(data) {
-    return data.params && !isGET(data) ? data.params : undefined;
+function hasQueryParamsAndIsNotGet(requestTypes) {
+    return requestTypes.params && !isGET(requestTypes) ? requestTypes.params : undefined;
 }
 
-function setHeaderParams(xhr, data) {
-    for(var val in data){
-        if(requestTypes[val]){
-            xhr.setRequestHeader(val, data[val]);
+function setHeaderParams(xhr, requestTypes) {
+    var hasRequestType;
+    for(var val in requestTypes){
+        hasRequestType = REQUEST_TYPES[val];
+        if(hasRequestType){
+            xhr.setRequestHeader(val, requestTypes[val]);
         }
     }
 }
 
-function isMethodSetReturnElseDefaultToGet(data) {
-    return data.method ? data.method.toLowerCase() : 'get' ;
+function isMethodSetReturnElseDefaultToGet(requestTypes) {
+    return requestTypes.method ? requestTypes.method.toLowerCase() : 'get' ;
 }
 
-function bindXHREvents(xhr, cb) {
-    var retrieveResponseBind = retrieveResponse.bind(xhr, cb);
-    var responseErrorBind = responseError.bind(xhr, cb);
+function bindXHREvents(xhr, callback) {
+    var retrieveResponseBind = retrieveResponse.bind(xhr, callback);
+    var responseErrorBind = responseError.bind(xhr, callback);
     xhr.addEventListener('readystatechange', retrieveResponseBind, false);
     xhr.addEventListener('error', responseErrorBind, false);
 }
 
-function xhrRequest(url, data, cb) {
+function xhrRequest(url, requestTypes, callback) {
     var xhr = new XMLHttpRequest();
     var error;
-    var method = isMethodSetReturnElseDefaultToGet(data);
-    var paramsforPost = hasQueryParamsAndIsNotGet(data);
-    var isAsync = isFalseOrUndefined(data.async);
+    var method = isMethodSetReturnElseDefaultToGet(requestTypes);
+    var paramsforPost = hasQueryParamsAndIsNotGet(requestTypes);
+    var isAsync = isFalseOrUndefined(requestTypes.async);
     if(isAsync){
-        bindXHREvents(xhr, cb);
+        bindXHREvents(xhr, callback);
     }
 
     xhr.open(method, url, isAsync);
-    setHeaderParams(xhr, data);
+    setHeaderParams(xhr, requestTypes);
 
     try{
         xhr.send(paramsforPost);
@@ -102,66 +104,66 @@ function xhrRequest(url, data, cb) {
     }
 }
 
-function bindPromise(url, data) {
+function bindPromise(url, requestTypes) {
     var _arguments = Array.prototype.slice.call(arguments);
-    var isAsync = isFalseOrUndefined(data.async);
+    var isAsync = isFalseOrUndefined(requestTypes.async);
     promise = new Promise();
     if(isAsync){
-        promise.resolveRecursive(_arguments[0], data, xhrRequest);
+        promise.resolveRecursive(_arguments[0], requestTypes, xhrRequest);
     }else {
-        xhrRequest(url, data);
+        xhrRequest(url, requestTypes);
     }
 
     return promise;
 }
 
-function constructRequest(method, url, data) {
-    var dataAugment = data || {};
+function constructRequest(method, url, requestTypes) {
+    var assembledRequestTypes = requestTypes || {};
 
     switch(method){
         case 'GET_JSON':
-            dataAugment['Accept-Type'] =  dataAugment['Accept-Type'] || 'application/json';
-            dataAugment['Content-Type'] = dataAugment['Content-Type'] || 'application/json';
-            dataAugment.method = 'GET';
+            assembledRequestTypes['Accept-Type'] =  assembledRequestTypes['Accept-Type'] || 'application/json';
+            assembledRequestTypes['Content-Type'] = assembledRequestTypes['Content-Type'] || 'application/json';
+            assembledRequestTypes.method = 'GET';
             break;
         case 'POST':
-            dataAugment['Content-Type'] = dataAugment['Content-Type'] || 'application/x-www-form-urlencoded';
-            dataAugment.method = 'POST';
+            assembledRequestTypes['Content-Type'] = assembledRequestTypes['Content-Type'] || 'application/x-www-form-urlencoded';
+            assembledRequestTypes.method = 'POST';
             break;
         case 'PUT':
-            dataAugment['Content-Type'] =  dataAugment['Content-Type'] || 'application/x-www-form-urlencoded';
-            dataAugment.method = 'PUT';
+            assembledRequestTypes['Content-Type'] =  assembledRequestTypes['Content-Type'] || 'application/x-www-form-urlencoded';
+            assembledRequestTypes.method = 'PUT';
             break;
         case 'DELETE':
-            dataAugment['Content-Type'] =  dataAugment['Content-Type'] || 'application/x-www-form-urlencoded';
-            dataAugment.method = 'DELETE';
+            assembledRequestTypes['Content-Type'] =  assembledRequestTypes['Content-Type'] || 'application/x-www-form-urlencoded';
+            assembledRequestTypes.method = 'DELETE';
             break;
         default:
-            dataAugment['Accept-Type'] =  dataAugment['Accept-Type'] || 'text/html';
-            dataAugment['Content-Type'] = dataAugment['Content-Type'] || 'text/html; charset=utf-8';
-            dataAugment.method = 'GET';
+            assembledRequestTypes['Accept-Type'] =  assembledRequestTypes['Accept-Type'] || 'text/html';
+            assembledRequestTypes['Content-Type'] = assembledRequestTypes['Content-Type'] || 'text/html; charset=utf-8';
+            assembledRequestTypes.method = 'GET';
     }
-    return bindPromise(url, dataAugment);
+    return bindPromise(url, assembledRequestTypes);
 }
 
-XHRRequestAPI.prototype.post = function(url, data){
-    return constructRequest('POST', url, data);
+XHRRequestAPI.prototype.post = function(url, requestTypes){
+    return constructRequest('POST', url, requestTypes);
 };
 
-XHRRequestAPI.prototype.get = function(url, data){
-    return constructRequest('GET', url, data);
+XHRRequestAPI.prototype.get = function(url, requestTypes){
+    return constructRequest('GET', url, requestTypes);
 };
 
-XHRRequestAPI.prototype.put = function(url, data){
-    return constructRequest('PUT', url, data);
+XHRRequestAPI.prototype.put = function(url, requestTypes){
+    return constructRequest('PUT', url, requestTypes);
 };
 
-XHRRequestAPI.prototype.del = function(url, data){
-    return constructRequest('DELETE', url, data);
+XHRRequestAPI.prototype.del = function(url, requestTypes){
+    return constructRequest('DELETE', url, requestTypes);
 };
 
-XHRRequestAPI.prototype.getJSON = function(url, data){
-    return constructRequest('GET_JSON', url, data);
+XHRRequestAPI.prototype.getJSON = function(url, requestTypes){
+    return constructRequest('GET_JSON', url, requestTypes);
 };
 
 module.exports = new XHRRequestAPI();

@@ -14,7 +14,7 @@ module.exports = function(grunt) {
                             'public/css/*.css',
                             'public/fonts/**/*',
                             'public/images/**/*',
-                            'public/templates/**/*',
+                            'public/react-views/**/*',
                             'public/views/**/*'
                         ],
                         dest: 'production/'
@@ -67,9 +67,9 @@ module.exports = function(grunt) {
                 files: [
                     {
                         expand: true,
-                        cwd: 'development/public/views/',
+                        cwd: 'development/public/react-views/jsx',
                         src: ['**/*.jsx'],
-                        dest: 'development/public/templates/',
+                        dest: 'development/public/react-views/',
                         ext: '.js'
                     }
                 ]
@@ -90,7 +90,7 @@ module.exports = function(grunt) {
         karma: {
             unit: {
                 configFile: 'karma.conf.js',
-                browsers: ['PhantomJS']
+                browsers: ['Chrome']
             },
             continuous: {
                 configFile: 'karma.conf.js',
@@ -111,7 +111,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-react');
 
     grunt.registerTask('test', ['karma']);
+    grunt.registerTask('build',  ['sass', 'jshint', 'react', 'browserify', 'copy']);
     grunt.registerTask('default', ['sass', 'jshint', 'react', 'karma:continuous', 'browserify', 'copy', 'uglify']);
-
 };
 
