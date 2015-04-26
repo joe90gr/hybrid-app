@@ -14,7 +14,6 @@ module.exports = function(grunt) {
                             'public/css/*.css',
                             'public/fonts/**/*',
                             'public/images/**/*',
-                            'public/react-views/**/*',
                             'public/views/**/*'
                         ],
                         dest: 'production/'
@@ -69,7 +68,7 @@ module.exports = function(grunt) {
                         expand: true,
                         cwd: 'development/public/react-views/jsx',
                         src: ['**/*.jsx'],
-                        dest: 'development/public/react-views/',
+                        dest: 'development/public/react-views/transpiled-jsx',
                         ext: '.js'
                     }
                 ]

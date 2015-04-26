@@ -32,7 +32,7 @@ Main.prototype.init = function(){
     //$('body div').append('<h2>here i am</h2>');
    // var t = require('../templates/y');
     var t = require('../react-views/jsx/y.jsx');
-    var test = require('../react-views/test');
+    var test = require('../react-views/transpiled-jsx/test');
     //React.renderComponent(t(null), document.getElementById('example'));
 
     var login = document.getElementById('login');
