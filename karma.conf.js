@@ -75,7 +75,12 @@ module.exports = function(config) {
     browserify: {
         debug: true,
         transform: ['reactify'],
-        extensions: ['js', 'jsx']
+        extensions: ['js', 'jsx'],
+        configure: function(bundle) {
+            bundle.on('prebundle', function() {
+                //bundle.exclude('development/public/js/utils/promise.js');
+            });
+        }
     },
 
 
