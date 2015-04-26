@@ -44,8 +44,8 @@ describe('xhrRequestAPI', function() {
     describe('given that the request url is invalid', function() {
         before(function(done){
             this.timeout(6000);
-            successSpy = sinon.spy( function success(response){ console.log(response);done();} );
-            rejectSpy = sinon.spy( function fail(response){console.log(response); done(); } );
+            successSpy = sinon.spy( function success(response){ done();} );
+            rejectSpy = sinon.spy( function fail(response){ done(); } );
             xhr.get(INACTIVE_BASE_URL, ASYNCHRONOUS).then(successSpy, rejectSpy);
         })
 
