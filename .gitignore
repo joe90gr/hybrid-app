@@ -2,7 +2,6 @@
 .sass-cache
 development/public/bower_components/
 development/public/index.js
-development/public/react-views/transpiled-jsx
 tests/indexSpec.js
 node_modules/
 production/

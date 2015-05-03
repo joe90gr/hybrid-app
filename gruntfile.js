@@ -11,9 +11,8 @@ module.exports = function(grunt) {
                             'index.js',
                             'bin/**/*',
                             'routes/**/*',
-                            'public/css/*.css',
-                            'public/fonts/**/*',
-                            'public/images/**/*',
+                            'public/main-client-app/css/*.css',
+                            'public/main-client-app/assets/**/*',
                             'public/views/**/*'
                         ],
                         dest: 'production/'
@@ -27,13 +26,13 @@ module.exports = function(grunt) {
             },
             dist: {
                 files: {
-                    'development/public/css/styles.css': 'development/public/css/sass/styles.scss'
+                    'development/public/main-client-app/css/styles.css': 'development/public/main-client-app/css/sass/styles.scss'
                 }
             }
         },
         jshint: {
             all: [
-                'development/public/js/**/*.js'
+                'development/public/main-client-app/js/**/*.js'
             ],
             options:{
                 strict: false
@@ -41,7 +40,7 @@ module.exports = function(grunt) {
         },
         watch: {
             sass: {
-                files: ['development/public/css/sass/*.scss'],
+                files: ['development/public/main-client-app/css/sass/*.scss'],
                 tasks: ['sass'],
                 options: { debounceDelay: 250 }
             },
@@ -64,7 +63,7 @@ module.exports = function(grunt) {
         browserify: {
             dist: {
                 files: {
-                    'development/public/index.js': ['development/public/js/**/*.js']
+                    'development/public/index.js': ['development/public/main-client-app/js/**/*.js']
                 },
                 options: {
                     transform:  [

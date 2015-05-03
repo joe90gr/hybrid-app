@@ -37,6 +37,6 @@
   },
   "scripts": {
     "postinstall": "bower install",
-    "start": "nodemon ./development/bin/www"
+    "start": "nodemon ./production/bin/www"
   }
 }

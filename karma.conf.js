@@ -17,7 +17,7 @@ module.exports = function(config) {
         //'test/*Spec.js' // same as {pattern: 'test/*Spec.js', included: true},
         //{pattern: 'tests/indexSpec.js', included: true},
        // {pattern: 'test/utils/**/*Spec.js', included: false},
-        {pattern: 'development/public/js/utils/polyfills/bind.js', included: true},
+        {pattern: 'development/public/main-client-app/js/utils/polyfills/bind.js', included: true},
         'tests/**/*.js'
     ],
 
