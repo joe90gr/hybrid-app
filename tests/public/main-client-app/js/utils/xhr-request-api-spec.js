@@ -1,4 +1,4 @@
-var xhrRequest = require('../../../../development/public/main-client-app/js/utils/xhr-request-api.js');
+var xhrRequest = require('../../../../../development/public/main-client-app/js/utils/xhr-request-api.js');
 
 describe('xhrRequestAPI', function() {
     var xhr = xhrRequest;

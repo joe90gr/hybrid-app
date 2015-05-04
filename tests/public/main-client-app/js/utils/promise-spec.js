@@ -1,4 +1,4 @@
-var Promise = require('../../../../development/public/main-client-app/js/utils/promise.js');
+var Promise = require('../../../../../development/public/main-client-app/js/utils/promise.js');
 
 describe('given the promise is initialised', function() {
     var promise;
