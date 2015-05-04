@@ -5,7 +5,7 @@
     "**/.*",
     "node_modules",
     "bower_components",
-    "test"
+    "tests"
   ],
   "dependencies": {
     "jquery": "git://github.com/jquery/jquery.git#~2.1.1"
