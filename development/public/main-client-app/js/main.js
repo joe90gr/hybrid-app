@@ -28,7 +28,7 @@ Main.prototype.init = function(){
     //ajax.put(['/about'],put).then(success, reject);
     //ajax.del(['/about'],del).then(success, reject);
 
-    var todoExample = require('../../react-views/example-view/y.jsx');
+    var todoExample = require('../../../views/react/example-view/y.jsx');
     React.render(React.createElement(todoExample, null), document.getElementById('example'));
 
     var login = document.getElementById('login');

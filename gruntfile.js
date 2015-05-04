@@ -11,9 +11,11 @@ module.exports = function(grunt) {
                             'index.js',
                             'bin/**/*',
                             'routes/**/*',
+                            'views/**/*.*',
+                            'views/**/**/.*',
                             'public/main-client-app/css/*.css',
-                            'public/main-client-app/assets/**/*',
-                            'public/views/**/*'
+                            'public/main-client-app/assets/**/*.*'
+
                         ],
                         dest: 'production/'
                     }
