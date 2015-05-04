@@ -1,6 +1,6 @@
 .idea
 .sass-cache
-development/public/bower_components/
+development/bower_components/
 development/public/index.js
 tests/indexSpec.js
 node_modules/

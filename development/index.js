@@ -9,6 +9,8 @@ var session = require('express-session');
 var app = express();
 module.exports = app;
 
+app.locals = require('./config/app-config');
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views/templates'));
 app.set('view engine', 'hjs');

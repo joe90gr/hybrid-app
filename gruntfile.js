@@ -10,6 +10,7 @@ module.exports = function(grunt) {
                         src: [
                             'index.js',
                             'bin/**/*',
+                            'config/**/*',
                             'routes/**/*',
                             'views/**/*.*',
                             'views/**/**/.*',
