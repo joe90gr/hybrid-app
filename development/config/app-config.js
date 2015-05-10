@@ -1,5 +1,6 @@
 module.exports = {
-    TITLE: 'joe90'
+    TITLE: 'joe90',
+    test: "joe"
 }
 
 

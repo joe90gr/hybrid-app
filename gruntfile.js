@@ -72,6 +72,13 @@ module.exports = function(grunt) {
                 options : { binderName: 'nodejs' }
             }
         },
+        react: {
+            single_file_output: {
+                files: {
+                    'development/views/compiled-react.js': 'development/views/**/*.jsx'
+                }
+            }
+        },
         browserify: {
             dist: {
                 files: {
@@ -102,11 +109,12 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-hogan');
+    grunt.loadNpmTasks('grunt-react');
     grunt.loadNpmTasks('grunt-browserify');
     grunt.loadNpmTasks('grunt-contrib-uglify');
 
     grunt.registerTask('test', ['karma']);
-    grunt.registerTask('build',  ['sass', 'jshint', 'hogan', 'browserify', 'copy']);
-    grunt.registerTask('default', ['sass', 'jshint', 'hogan', 'karma:continuous', 'browserify', 'copy', 'uglify']);
+    grunt.registerTask('build',  ['sass', 'jshint', 'hogan', 'react', 'browserify', 'copy']);
+    grunt.registerTask('default', ['sass', 'jshint', 'hogan', 'react', 'karma:continuous', 'browserify', 'copy', 'uglify']);
 };
 

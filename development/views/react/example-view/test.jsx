@@ -1,3 +1,3 @@
 /** @jsx React.DOM */
 
-module.exports = {};
+exports.test = {};

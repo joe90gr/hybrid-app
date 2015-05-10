@@ -1,16 +1,14 @@
 {
     "debug": true,
-    "transform":  [
-        "reactify"
-    ],
     "alias": {
         "hogan.js":"./node_modules/hogan/node_modules/hogan.js/dist/hogan-3.0.2.min.js"
     },
     "plugin": [
         ["remapify", [
+            { "src": "**/*.js", "expose": "config", "cwd": "development/config"},
             { "src": "**/*.js", "expose": "public", "cwd": "development/public"},
-            { "src": "**/*.js", "expose": "bower_components", "cwd": "development/bower_components"},
-            { "src": "**/*.js", "expose": "views", "cwd": "development/views"}
+            { "src": "**/*.js", "expose": "views", "cwd": "development/views"},
+            { "src": "**/*.js", "expose": "bower_components", "cwd": "development/bower_components"}
         ]]
     ],
     "extensions": ["js", "jsx"]

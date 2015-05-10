@@ -11,7 +11,7 @@ var TodoList = React.createClass({
   }
 });
 
-var TodoApp = React.createClass({
+exports.todoApp = React.createClass({
   getInitialState: function() {
     return {items: [], text: ''};
   },
@@ -37,5 +37,3 @@ var TodoApp = React.createClass({
     );
   }
 });
-
-module.exports = TodoApp

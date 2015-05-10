@@ -8,6 +8,7 @@
     "tests"
   ],
   "dependencies": {
-    "jquery": "git://github.com/jquery/jquery.git#~2.1.1"
+    "jquery": "git://github.com/jquery/jquery.git#~2.1.1",
+    "underscore": "~1.8.3"
   }
 }

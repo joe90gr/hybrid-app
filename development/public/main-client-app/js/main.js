@@ -1,7 +1,7 @@
-//var $ = require('../bower_components/jquery/dist/jquery');
-
+var $ = require('bower_components/jquery/dist/jquery');
 var React = require('react');
 var ajax = require('public/main-client-app/js/utils/xhr-request-api');
+var template = require('views/compiled-hogan');
 
 function success(res){
     console.log(res.response);
@@ -28,26 +28,33 @@ Main.prototype.init = function(){
     //ajax.put(['/about'],put).then(success, reject);
     //ajax.del(['/about'],del).then(success, reject);
 
-    var todoExample = require('../../../views/react/example-view/y.jsx');
-    React.render(React.createElement(todoExample, null), document.getElementById('example'));
+    $(function(){
+        var todoExample = require('views/compiled-react.js');
+        React.render(React.createElement(todoExample.todoApp, null), document.getElementById('example'));
+        document.getElementById('hogan-example').innerHTML = template.about({ title: "Hulk" });
 
-    var login = document.getElementById('login');
-    login.addEventListener('click',function() {
-        var config = {
-            "Content-Type": "application/json",
-            params:'{"userName":"joe90"}'
-        };
-        ajax.post(['/login'], config).then(function(res){
-            console.log(res.response);
-        }, function(err) {});
-    },false);
+        var login = document.getElementById('login');
+        login.addEventListener('click',function() {
+            var config = {
+                "Content-Type": "application/json",
+                params:'{"userName":"joe90"}'
+            };
+            ajax.post(['/login'], config).then(function(res){
+                console.log(res.response);
+            }, function(err) {});
+        },false);
 
-    var logout = document.getElementById('logout');
-    logout.addEventListener('click',function() {
-        ajax.get(['/logout']).then(function(res){
-            console.log(res.response);
-        }, function(err) {});
-    },false);
+        var logout = document.getElementById('logout');
+        logout.addEventListener('click',function() {
+            ajax.get(['/logout']).then(function(res){
+                console.log(res.response);
+            }, function(err) {});
+        },false);
+    });
+
+
+
+
 };
 
 module.exports =  Main;
