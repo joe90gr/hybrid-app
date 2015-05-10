@@ -11,7 +11,7 @@
         <div>
             {{{ yield }}}
             <div id="example"></div>
-
+            <div id="hogan-example"></div>
         </div>
 	</body>
 </html>

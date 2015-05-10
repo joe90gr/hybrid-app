@@ -1,4 +1,6 @@
 module.exports = function(grunt) {
+    var browserifyConfig = grunt.file.readJSON('browserify-config.json');
+
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         copy: {
@@ -63,6 +65,13 @@ module.exports = function(grunt) {
                 }
             }
         },
+        hogan: {
+            target : {
+                src : 'development/views/**/*.hjs',
+                dest : 'development/views/compiled-hogan.js',
+                options : { binderName: 'nodejs' }
+            }
+        },
         browserify: {
             dist: {
                 files: {
@@ -70,16 +79,7 @@ module.exports = function(grunt) {
                         'development/public/main-client-app/js/**/*.js'
                     ]
                 },
-                options: {
-                    debug: true,
-                    transform:  [
-                        'reactify',
-                        ['hoganify', { ext: '.html,.hg,.hjs' }]
-                    ],
-                    alias: {
-                        'hogan.js':'./node_modules/hogan/node_modules/hogan.js/dist/hogan-3.0.2.min.js'
-                    }
-                }
+                options: browserifyConfig
             }
         },
         karma: {
@@ -101,11 +101,12 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-sass');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-hogan');
     grunt.loadNpmTasks('grunt-browserify');
     grunt.loadNpmTasks('grunt-contrib-uglify');
 
     grunt.registerTask('test', ['karma']);
-    grunt.registerTask('build',  ['sass', 'jshint', 'browserify', 'copy']);
-    grunt.registerTask('default', ['sass', 'jshint', 'karma:continuous', 'browserify', 'copy', 'uglify']);
+    grunt.registerTask('build',  ['sass', 'jshint', 'hogan', 'browserify', 'copy']);
+    grunt.registerTask('default', ['sass', 'jshint', 'hogan', 'karma:continuous', 'browserify', 'copy', 'uglify']);
 };
 

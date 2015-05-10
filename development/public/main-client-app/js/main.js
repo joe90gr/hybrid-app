@@ -1,7 +1,7 @@
 //var $ = require('../bower_components/jquery/dist/jquery');
 
 var React = require('react');
-var ajax = require('../js/utils/xhr-request-api');
+var ajax = require('public/main-client-app/js/utils/xhr-request-api');
 
 function success(res){
     console.log(res.response);

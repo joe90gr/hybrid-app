@@ -2,6 +2,8 @@
 // Generated on Fri Sep 13 2013 23:39:41 GMT+0100 (GMT Daylight Time)
 
 module.exports = function(config) {
+  var browserifyConfig = require('./browserify-config.json');
+
   config.set({
 
     // base path, that will be used to resolve files and exclude
@@ -72,16 +74,7 @@ module.exports = function(config) {
 
 
     // Browserify config (all optional)
-    browserify: {
-        debug: true,
-        transform: ['reactify'],
-        extensions: ['js', 'jsx'],
-        configure: function(bundle) {
-            bundle.on('prebundle', function() {
-                //bundle.exclude('development/public/js/utils/promise.js');
-            });
-        }
-    },
+    browserify: browserifyConfig,
 
 
     // Add browserify to preprocessors

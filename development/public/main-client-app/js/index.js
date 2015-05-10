@@ -1,12 +1,12 @@
-var config = require('../../client-config/config');
-var $ = require('../../../bower_components/jquery/dist/jquery');
-var myapp = require('./main');
+var config = require('public/client-config/config.js');
+var $ = require('bower_components/jquery/dist/jquery');
+var myapp = require('public/main-client-app/js/main');
 
-var template = require('../../../views/templates/about.hjs');
+var template = require('views/compiled-hogan');
 
 console.log(config);
 $(function(){
     var Console = new myapp();
-    document.getElementById('example').innerHTML = template.render({ title: "Hulk" });
+    document.getElementById('hogan-example').innerHTML = template.about({ title: "Hulk" });
 });
 

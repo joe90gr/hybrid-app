@@ -1,4 +1,4 @@
-var Promise = require('../../js/utils/promise');
+var Promise = require('public/main-client-app/js/utils/promise');
 var promise;
 var REQUEST_TYPES = {
     'Accept': 'Accept',
