@@ -12,6 +12,7 @@
             {{{ yield }}}
             <div id="example"></div>
             <div id="hogan-example"></div>
+            <div id="timer"></div>
         </div>
 	</body>
 </html>

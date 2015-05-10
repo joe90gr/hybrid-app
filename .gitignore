@@ -3,6 +3,7 @@
 development/bower_components/
 development/public/index.js
 development/views/compiled-hogan.js
+development/views/compiled-react.js
 tests/indexSpec.js
 node_modules/
 production/

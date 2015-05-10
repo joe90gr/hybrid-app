@@ -3,6 +3,8 @@ var React = require('react');
 var ajax = require('public/main-client-app/js/utils/xhr-request-api');
 var template = require('views/compiled-hogan');
 
+var reactClass = require('views/compiled-react.js');
+
 function success(res){
     console.log(res.response);
    //console.log(res.getAllResponseHeaders())
@@ -29,9 +31,12 @@ Main.prototype.init = function(){
     //ajax.del(['/about'],del).then(success, reject);
 
     $(function(){
-        var todoExample = require('views/compiled-react.js');
-        React.render(React.createElement(todoExample.todoApp, null), document.getElementById('example'));
+
+        React.render(React.createElement(reactClass.todoApp, null), document.getElementById('example'));
+        React.render(React.createElement(reactClass.timer, null), document.getElementById('timer'));
         document.getElementById('hogan-example').innerHTML = template.about({ title: "Hulk" });
+
+
 
         var login = document.getElementById('login');
         login.addEventListener('click',function() {
