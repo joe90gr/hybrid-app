@@ -66,12 +66,19 @@ module.exports = function(grunt) {
         browserify: {
             dist: {
                 files: {
-                    'development/public/index.js': ['development/public/main-client-app/js/**/*.js']
+                    'development/public/index.js': [
+                        'development/public/main-client-app/js/**/*.js'
+                    ]
                 },
                 options: {
+                    debug: true,
                     transform:  [
-                        'reactify'
-                    ]
+                        'reactify',
+                        ['hoganify', { ext: '.html,.hg,.hjs' }]
+                    ],
+                    alias: {
+                        'hogan.js':'./node_modules/hogan/node_modules/hogan.js/dist/hogan-3.0.2.min.js'
+                    }
                 }
             }
         },
