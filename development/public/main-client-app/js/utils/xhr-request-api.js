@@ -47,10 +47,6 @@ function isGET(requestTypes) {
     return requestTypes.method.toLowerCase() === 'get';
 }
 
-function isFalseOrUndefined(item) {
-    return (item === false) ? item : true;
-}
-
 function hasQueryParamsAndIsNotGet(requestTypes) {
     return requestTypes.params && !isGET(requestTypes) ? requestTypes.params : undefined;
 }
@@ -78,71 +74,39 @@ function bindXHREvents(xhr, callback) {
 
 function xhrRequest(url, requestTypes, callback) {
     var xhr = new XMLHttpRequest();
-    var error;
     var method = isMethodSetReturnElseDefaultToGet(requestTypes);
     var paramsforPost = hasQueryParamsAndIsNotGet(requestTypes);
-    var isAsync = isFalseOrUndefined(requestTypes.async);
-    if(isAsync){
-        bindXHREvents(xhr, callback);
-    }
 
-    xhr.open(method, url, isAsync);
+    bindXHREvents(xhr, callback);
+    xhr.open(method, url, true);
     setHeaderParams(xhr, requestTypes);
 
     try{
         xhr.send(paramsforPost);
     } catch(e){
-        error = e;
-    }
-
-    if(!isAsync){
-        if (xhr.status === 200) {
-            promise.resolve(xhr, null);
-        } else {
-            promise.reject(error, null);
-        }
+        console.warn(e);
     }
 }
 
 function bindPromise(url, requestTypes) {
     var _arguments = Array.prototype.slice.call(arguments);
-    var isAsync = isFalseOrUndefined(requestTypes.async);
     promise = new Promise();
-    if(isAsync){
-        promise.resolveRecursive(_arguments[0], requestTypes, xhrRequest);
-    }else {
-        xhrRequest(url, requestTypes);
-    }
+    promise.resolveRecursive(_arguments[0], requestTypes, xhrRequest);
 
     return promise;
 }
 
 function constructRequest(method, url, requestTypes) {
     var assembledRequestTypes = requestTypes || {};
-
-    switch(method){
-        case 'GET_JSON':
-            assembledRequestTypes['Accept-Type'] =  assembledRequestTypes['Accept-Type'] || 'application/json';
-            assembledRequestTypes['Content-Type'] = assembledRequestTypes['Content-Type'] || 'application/json';
-            assembledRequestTypes.method = 'GET';
-            break;
-        case 'POST':
-            assembledRequestTypes['Content-Type'] = assembledRequestTypes['Content-Type'] || 'application/x-www-form-urlencoded';
-            assembledRequestTypes.method = 'POST';
-            break;
-        case 'PUT':
-            assembledRequestTypes['Content-Type'] =  assembledRequestTypes['Content-Type'] || 'application/x-www-form-urlencoded';
-            assembledRequestTypes.method = 'PUT';
-            break;
-        case 'DELETE':
-            assembledRequestTypes['Content-Type'] =  assembledRequestTypes['Content-Type'] || 'application/x-www-form-urlencoded';
-            assembledRequestTypes.method = 'DELETE';
-            break;
-        default:
-            assembledRequestTypes['Accept-Type'] =  assembledRequestTypes['Accept-Type'] || 'text/html';
-            assembledRequestTypes['Content-Type'] = assembledRequestTypes['Content-Type'] || 'text/html; charset=utf-8';
-            assembledRequestTypes.method = 'GET';
+    if (method === 'GET_JSON') {
+        assembledRequestTypes['Accept-Type'] =  assembledRequestTypes['Accept-Type'] || 'application/json';
+        assembledRequestTypes['Content-Type'] = assembledRequestTypes['Content-Type'] || 'application/json';
+    } else {
+        assembledRequestTypes['Accept-Type'] =  assembledRequestTypes['Accept-Type'] || 'text/html';
+        assembledRequestTypes['Content-Type'] = assembledRequestTypes['Content-Type'] || 'text/html; charset=utf-8';
     }
+    assembledRequestTypes.method = method;
+
     return bindPromise(url, assembledRequestTypes);
 }
 
