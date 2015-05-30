@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 	<head>
 		<title>{{ title }}</title>
-		<link rel="stylesheet" text="text/css" href="main-client-app/css/styles.css" />
-		<script src="index.js"></script>
-
+		<link rel="stylesheet" text="text/css" href="/main-client-app/css/styles.css" />
+		<script src="/index.js"></script>
 	</head>
 	<body>
 	<button id="login">login</button>
 	<button id="logout">logout</button>
+	<button id="clickon">on</button>
+	<button id="clickoff">off</button>
         <div>
             {{{ yield }}}
             <div id="example"></div>

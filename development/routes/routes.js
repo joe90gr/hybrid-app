@@ -1,15 +1,12 @@
 var app = require('../index');
+var express = require('express');
+var router = express.Router();
 
-var routes = require('./index');
-var users = require('./users');
-var about = require('./about');
+var routerConfig = require('../config/routes-config').routes;
 
-app.use('/', routes);
-app.use('/users', users);
-app.use('/about', about);
-
-
-
+for(var key in routerConfig){
+    app.use(key, require('./' + routerConfig[key]));
+}
 
 //app.route('/about')
 //    .all(function(req, res, next) {
