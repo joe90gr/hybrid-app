@@ -1,3 +1,4 @@
+var Events = require('public/main-client-app/js/utils/events');
 var React = require('react');
 var ajax = require('public/main-client-app/js/utils/xhr-request-api');
 var template = require('views/compiled-hogan');
@@ -23,6 +24,14 @@ Main.prototype.init = function() {
     //for(var i = 0; i <100; i++) {
         //ajax.post(['/about'],{params:'user=yrtytryrtyrt'}).then(success, reject);
     //}
+    var events = new Events();
+
+    events.on('joetest', function(args) {
+        console.log('handler response: ', args);
+    });
+
+    events.trigger('joetest', 'joe is the best');
+
 
     var put = { params:'{"put":"success"}'};
     var del = {"Content-Type": "application/json", params:'{"del":"success"}'};
